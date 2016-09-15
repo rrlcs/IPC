@@ -1,0 +1,13 @@
+#! /bin/bash
+
+rlog header.h,v   > $1
+rlog semun.h,v   > $1
+rlog request.h,v >> $1
+rlog server.c,v  >> $1
+rlog client1.c,v >> $1
+rlog adder.c,v >> $1
+rlog client2.c,v >> $1
+rlog substract.c,v >> $1
+rlog client3.c,v >> $1
+rlog multiply.c,v >> $1
+

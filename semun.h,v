@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks
+	root:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2016.01.06.20.04.28;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@union semun {
+        int val;                        /* value for SETVAL */
+        struct semid_ds *buf;   /* buffer for IPC_STAT & IPC_SET */
+        unsigned short *array;  /* array for GETALL & SETALL */
+        struct seminfo *__buf;  /* buffer for IPC_INFO */
+        void *__pad;
+};
+
+@

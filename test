@@ -1,0 +1,91 @@
+#! /bin/bash
+
+for file in $(ls *.c)
+do
+	ci *.c
+done
+
+for file in $(ls *.h)
+do
+	ci *.h
+done
+
+
+#for file in $(ls *.c,v)
+#do
+	co *.c,v
+#done
+
+#for file in $(ls *.h,v)
+#do
+	co *.h,v
+#done
+if ( gcc -o server server.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+if ( gcc -o client1 client1.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+if ( gcc -o adder adder.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+
+if ( gcc -o client2 client2.c)
+then
+
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+if ( gcc -o substractor substract.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+if ( gcc -o client3 client3.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+if ( gcc -o multiply multiply.c)
+then
+	echo "compilation successful"
+else
+	echo "compilation failed"
+fi
+echo "Do You Want to Run(y/n)?"
+read response
+if [ $response='y' ]
+then
+	./server &
+for(( i=1;i<5000;i++ ))
+do
+	./client1 &
+done
+for(( i=1;i<5000;i++ ))
+do
+	./client2 &
+done
+	./client3 
+else
+	echo "Exiting Program!"
+fi
+#for file in $(ls *.c,v)
+#do
+	co -l *.c,v
+#done
+#for file in $(ls *.h,v)
+#do
+	co -l *.h,v
+#done

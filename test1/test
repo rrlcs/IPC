@@ -1,0 +1,43 @@
+#! /bin/bash
+ciformake()
+{
+	for file in $(ls *.c)
+	do
+		ci *.c
+	done
+	
+	for file in $(ls *.h)
+	do
+		ci *.h
+	done
+}
+
+coformake()
+{
+	for file in $(ls *.c,v)
+	do
+		co *.c,v
+	done
+	
+	for file in $(ls *.h,v)
+	do
+		co *.h,v
+	done
+}
+
+edit()
+{
+	for file in $(ls *.c,v)
+	do
+		co -l *.c,v
+	done
+	for file in $(ls *.h,v)
+	do
+		co -l *.h,v
+	done
+}
+
+
+ciformake
+coformake
+edit

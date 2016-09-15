@@ -1,0 +1,156 @@
+head	1.3;
+access;
+symbols;
+locks
+	root:1.3; strict;
+comment	@ * @;
+
+
+1.3
+date	2016.01.07.10.39.51;	author root;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2016.01.06.20.06.37;	author root;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2016.01.06.20.04.23;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@#include"header.h"
+#include"client.h"
+#include"declarations.h"
+static int alarm_fired = 0;
+void check(int signo)
+{
+	printf("signal recieved!\n");
+	alarm_fired = 1;
+}
+
+int main()
+{
+	int fd, cl_fd, ret, res,cnt, fret,diff,mul, arr[2], NOC=0;
+	char rfdp1[4], wfdp1[4];
+	char client_fifo[256];
+	struct client1 r;
+	if(access(REQUESTFIFO, F_OK) == -1)
+	{
+		ret = mkfifo(REQUESTFIFO, 777);
+	}
+	else
+	{
+		printf("No Permission to create the FIFO\n");
+	}
+	printf("File: %s ret = %d\n",__FILE__,ret);
+	while(1)
+	{
+		fd = open(REQUESTFIFO, O_RDONLY);
+		ret = read(fd, &r, sizeof(struct client1));
+		printf("File: %s Read = %d bytes\n",__FILE__,ret);
+		if(pipe(arr)!=0)
+		{
+			printf("program faile \n");
+			exit(EXIT_SUCCESS);
+		}
+		printf("File: %s fd's created by the pipe 1 are arr[0] = %d arr[1] = %d\n", __FILE__, arr[0], arr[1]);
+		
+		sprintf(rfdp1,"%d", arr[0]);
+		sprintf(wfdp1,"%d", arr[1]);
+		fret = fork();
+		switch(fret)
+		{
+		case -1:
+			perror("fork");
+			break;
+		case 0:
+			switch(r.oper)
+			{
+				case '+':
+					execl("./adder", "adder",rfdp1,wfdp1, NULL);
+					break;
+				case '-':
+					execl("./substract", "substract",rfdp1,wfdp1, NULL);
+					break;
+				case '*':
+					execl("./multiply", "multiply",rfdp1,wfdp1, NULL);
+					break;
+			}
+			break;
+		default:
+			cnt = write(arr[1], &r, sizeof(struct client1));
+			printf("File: %s Wrote %d bytes TO ADDER\n",__FILE__,cnt);
+
+			signal(SIGALRM, check);
+			wait();
+			if(alarm_fired)
+			{
+			ret = read(arr[0], &res, sizeof(int));
+			printf("File: %s Read %d bytes FROM ADDER\n",__FILE__,ret);
+			printf("File: %s Result from ADDER.c =  %d \n",__FILE__,res);
+			alarm_fired = 0;
+			}
+			sprintf(client_fifo, RESULTFIFO, r.pid);
+			cl_fd = open(client_fifo, O_WRONLY);
+			ret = write(cl_fd, &res, sizeof(int));
+			printf("File: %s Wrote %d bytes TO CLIENT1\n",__FILE__,ret);
+		}
+	close(arr[0]);
+	close(arr[1]);
+	close(fd);
+	close(cl_fd);
+	NOC++;
+	printf("No. Of Clients Running = %d\n", NOC);
+	}
+
+
+	return 0;
+}
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d4 1
+a4 1
+/*static int alarm_fired = 0;
+d9 1
+a9 1
+}*/
+d64 1
+a64 1
+//			signal(SIGALRM, check);
+d66 2
+a67 2
+			//if(alarm_fired)
+			//{
+d71 2
+a72 2
+		//	alarm_fired = 0;
+		//	}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d81 1
+@

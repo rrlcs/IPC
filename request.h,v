@@ -1,0 +1,35 @@
+head	1.1;
+access;
+symbols;
+locks
+	root:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2016.01.06.20.04.28;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@struct request
+{
+
+
+	char oper;
+	int opr1;
+	int opr2;
+
+
+};
+
+@
